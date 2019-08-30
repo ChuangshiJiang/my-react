@@ -15,6 +15,11 @@ module.exports = {
         test: /\.js$/,
         use: ['babel-loader?cacheDirectory=true'],
         include: path.join(__dirname, 'src')
+      },
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'// babel的loader，jsx文件使用babel-loader处理
       }
     ]
   },
