@@ -1,6 +1,7 @@
 import React from 'react';
 import './style/App.css';
-import Index from './page/index';
+import IndexUseHooks from './page/indexLeft';
+import IndexUseClass from './page/indexRight';
 
 function App (props) {
   const themeColor = '#ccc';
@@ -12,7 +13,14 @@ function App (props) {
     content: '你好'
   }
   return (
-    <Index {...page}></Index>
+    <div className="examples">
+      <div className="left">
+        <IndexUseHooks {...page}></IndexUseHooks>
+      </div>
+      <div className="right">
+        <IndexUseClass {...page}></IndexUseClass>
+      </div>
+    </div>
   );
 }
 
