@@ -1,6 +1,5 @@
 import React from 'react';
 import './style/App.css';
-import { context } from './components/context';
 import Index from './page/index';
 
 function App (props) {
@@ -13,9 +12,7 @@ function App (props) {
     content: '你好'
   }
   return (
-    <context.Provider vlaue={config}>
-      <Index {...page}></Index>
-    </context.Provider>
+    <Index {...page}></Index>
   );
 }
 

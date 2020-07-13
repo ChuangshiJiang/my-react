@@ -1,14 +1,15 @@
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, { Fragment, useState } from 'react';
 
 function Index (props) {
-  const [count, setCount] = useState(0);
-  const dom = useRef(null);
-
-  useEffect(() => {
-    dom.current.addEventListener('click', () => setCount(count + 1));
-  }, []);
-
+  const [count, setCount] = useState(-100);
   const { title, content } = props;
+
+  const handleAdd = (step = 1) => {
+    return () => {
+      setCount(count + step);
+    }
+  }
+
   return (
     <Fragment>
       <div className="index">
@@ -17,7 +18,8 @@ function Index (props) {
       <div className="content">
         {content}
       </div>
-      <div ref={dom}>{count}</div>
+      <div>{count}</div>
+      <button onClick={handleAdd(10)}> Click Me </button>
     </Fragment>
   );
 }
