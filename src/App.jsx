@@ -4,10 +4,6 @@ import IndexUseHooks from './page/indexLeft';
 import IndexUseClass from './page/indexRight';
 
 function App (props) {
-  const themeColor = '#ccc';
-  const config = {
-    themeColor,
-  }
   const page = {
     title: 'hello',
     content: '你好'
