@@ -1,8 +1,8 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, memo } from 'react';
 
-export default function IndexUseHooks (props) {
+function IndexUseHooks (props) {
   const [count, setCount] = useState(0);
-  const { title, content,initialCount = 0 } = props;
+  const { title, content, initialCount = 0 } = props;
 
   const handleAdd = (step = 1) => {
     return () => {
@@ -41,3 +41,5 @@ export default function IndexUseHooks (props) {
     </Fragment>
   );
 }
+
+export default memo(IndexUseHooks);
