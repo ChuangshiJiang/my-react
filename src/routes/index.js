@@ -1,25 +1,35 @@
-import React, { Suspense } from 'react';
-import { Route, Switch, Link, Redirect } from 'react-router-dom';
-import Routes from './routeConfig';
-import ErrorPage from '@/page/Error/404';
-
-export default function Routes () {
-  return (
-    <Suspense>
-      <Switch>
-        {
-          Routes.map((route, index) => {
-            if (!!route.routeComp) {
-              return routeComp;
-            }
-            if (!!route.redirect) {
-              return <Redirect exact key={'redirect_' + index} from={route.from} to={route.to}></Redirect>
-            }
-            return <Route key={'route_' + index} path={route.path} component={route.component}></Route>
-          })
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import Home from '../application/Home/';
+import Rank from '../application/Rank/';
+import Recommend from '../application/Recommend/';
+import Singers from '../application/Singers/';
+export default [
+  {
+    path: '/',
+    component: Home,
+    routes: [
+      {
+        path: '/',
+        exact: true,
+        render: () => {
+          return (
+            <Redirect to={"/recommend"}></Redirect>
+          )
         }
-        <Route path="*" component={ErrorPage}></Route>
-      </Switch>
-    </Suspense>
-  )
-}
+      },
+      {
+        path:'/recommend',
+        component:Recommend
+      },
+      {
+        path:'/singers',
+        component:Singers
+      },
+      {
+        path:'/rank',
+        component:Rank
+      },
+    ]
+  }
+]
