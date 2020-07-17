@@ -1,5 +1,5 @@
 import React from 'react';
-import './style/index.css';
+import './style/App.css';
 import IndexUseHooks from './page/indexLeft';
 import IndexUseClass from './page/indexRight';
 
