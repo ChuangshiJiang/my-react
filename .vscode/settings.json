@@ -3,5 +3,6 @@
     "activityBar.background": "#38283F",
     "titleBar.activeBackground": "#4E3759",
     "titleBar.activeForeground": "#FBFAFC"
-  }
+  },
+  "svn.ignoreMissingSvnWarning": true
 }
