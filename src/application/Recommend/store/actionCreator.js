@@ -14,6 +14,11 @@ export const changeRecommendList = (data) => ({
   data: fromJS(data)
 })
 
+export const changeEnterLoading = (data) => ({
+  type: actionTypes.CHANGE_ENTER_LOADING,
+  data
+})
+
 export const getBannerList = () => {
   return dispath => {
     getBannerRequest().then(data => {
@@ -28,6 +33,7 @@ export const getRecommendList = () => {
   return dispath => {
     getRecommendListRequest().then(data => {
       dispath(changeRecommendList(data.result));
+      dispath(changeEnterLoading(false));
     }).catch(err => {
       console.error(err, '推荐歌单数据传输错误');
     });
