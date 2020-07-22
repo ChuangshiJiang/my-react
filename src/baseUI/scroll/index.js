@@ -10,7 +10,7 @@ const Scroll = forwardRef((props, ref) => {
   const [bScroll, setBScroll] = useState();
   const scrollContainerRef = useRef();
   const { direction, click, refresh, pullUpLoading, pullDownLoading, bounceTop, bounceBottom } = props;
-  const { pullUp, pullDown } = props;
+  const { pullUp, pullDown, onScroll } = props;
 
   let pullUpDebounce = useMemo(() => {
     return debounce(pullUp, 500);
@@ -36,7 +36,17 @@ const Scroll = forwardRef((props, ref) => {
     return () => {
       setBScroll(null);
     }
-  }, []);
+  }, [bounceTop, bounceBottom, direction, click]);
+
+  useEffect(() => {
+    if (!bScroll || !onScroll) return;
+    bScroll.on('scroll', (scroll) => {
+      onScroll(scroll);
+    });
+    return () => {
+      bScroll.off('scroll');
+    }
+  }, [bScroll, onScroll]);
 
   useEffect(() => {
     if (!bScroll || !pullUp) return;
