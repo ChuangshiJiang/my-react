@@ -6,3 +6,7 @@ export const getBannerRequest = ()=>{
 export const getRecommendListRequest = ()=>{
   return axiosInstance.get('/personalized');
 }
+
+export const getHotSingerListRequest = ()=>{};
+
+export const getSingerListRequest = ()=>{};
