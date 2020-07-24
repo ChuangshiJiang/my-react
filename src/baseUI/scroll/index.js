@@ -9,8 +9,8 @@ import { PullDownLoading, PullUpLoading, ScrollContainer } from './style';
 const Scroll = forwardRef((props, ref) => {
   const [bScroll, setBScroll] = useState();
   const scrollContainerRef = useRef();
-  const { direction, click, refresh, pullUpLoading, pullDownLoading, bounceTop, bounceBottom } = props;
-  const { pullUp, pullDown, onScroll } = props;
+  const { direction, click, refresh, bounceTop, bounceBottom } = props;
+  const { pullUp, pullDown, onScroll, pullUpLoading, pullDownLoading } = props;
 
   let pullUpDebounce = useMemo(() => {
     return debounce(pullUp, 500);

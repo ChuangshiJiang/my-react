@@ -5,7 +5,7 @@ import Scroll from '../../baseUI/scroll';
 import Horizen from '../../baseUI/horizen-item';
 import { connect } from 'react-redux';
 import LazyLoad, { forceCheck } from 'react-lazyload';
-import { categoryTypes, alphaTypes } from '../../api/config';
+import { categoryTypes, alphaTypes, type as types, area as areas } from '../../api/config';
 
 import {
   getSingerList,
@@ -16,12 +16,14 @@ import {
   changePullUpLoading,
   changePullDownLoading,
   refreshMoreHotSingerList
-} from './store/actionCreators';
+} from './store/actionCreator';
 
 function Singers (props) {
 
   let [category, setCategory] = useState('');
   let [alpha, setAlpha] = useState('');
+  let [area, setArea] = useState('-1');
+  let [type, setType] = useState('-1');
   const { singerList, enterLoading, pullUpLoading, pullDownLoading, pageCount } = props;
   const { getHotSingerDispatch, updateDispatch, pullDownRefreshDispatch, pullUpRefreshDispatch } = props;
 
@@ -31,31 +33,37 @@ function Singers (props) {
 
   let handleUpdateAlpha = (val) => {
     setAlpha(val);
-    updateDispatch(category, val);
+    updateDispatch(type, area, val);
   };
 
-  let handleUpdateCategory = (val) => {
-    setCategory(val);
-    updateDispatch(val, alpha);
+  let handleUpdateType = (val) => {
+    setType(val);
+    updateDispatch(val, area, alpha);
+  };
+
+  let handleUpdateArea = (val) => {
+    setArea(val);
+    updateDispatch(type, val, alpha);
   };
 
   const handlePullUp = () => {
-    pullUpRefreshDispatch(category, alpha, category === '', pageCount);
+    pullUpRefreshDispatch(type, area, alpha, pageCount);
   };
 
   const handlePullDown = () => {
-    pullDownRefreshDispatch(category, alpha);
+    pullDownRefreshDispatch(type, area, alpha);
   };
 
   const renderSingerList = () => {
     const list = singerList ? singerList.toJS() : [];
+    // console.table(list);
     return (
       <List>
         {
           list.map((item, index) => {
             return (
-              <ListItem key={item.accountId}>
-                <div classNam='img_wrapper'>
+              <ListItem key={item.accountId || item.id}>
+                <div className='img_wrapper'>
                   <LazyLoad placeholder={<img src={require('./singer.png')} />} alt='music'>
                     <img src={`${item.picUrl}?param=300x300`} width='100%' height='100%' alt='music' />
                   </LazyLoad>
@@ -72,7 +80,8 @@ function Singers (props) {
   return (
     <div>
       <NavContainer>
-        <Horizen list={categoryTypes} title={"分类(默认热门:)"} handleClick={val => handleUpdateCategory(val)} oldVal={category}></Horizen>
+        <Horizen list={types} title={"分类:"} handleClick={val => handleUpdateType(val)} oldVal={type}></Horizen>
+        <Horizen list={areas} title={"地区:"} handleClick={val => handleUpdateArea(val)} oldVal={area}></Horizen>
         <Horizen list={alphaTypes} title={"首字母:"} handleClick={val => handleUpdateAlpha(val)} oldVal={alpha}></Horizen>
       </NavContainer>
       <ListContainer>
@@ -102,29 +111,25 @@ const mapDispatchToProps = dispatch => {
     getHotSingerDispatch () {
       dispatch(getHotSingerList());
     },
-    updateDispatch (category, alpha) {
+    updateDispatch (type, area, alpha) {
       dispatch(changePageCount(0));
       dispatch(changeEnterLoading(true));
-      dispatch(getSingerList(category, alpha));
+      dispatch(getSingerList(type, area, alpha));
     },
     //滑到最底部刷新处理
-    pullUpRefreshDispatch (category, alpha, hot, count) {
+    pullUpRefreshDispatch (type, area, alpha, count) {
       dispatch(changePullUpLoading(true));
       dispatch(changePageCount(count + 1));
-      if (hot) {
-        dispatch(refreshMoreHotSingerList());
-      } else {
-        dispatch(refreshMoreSingerList(category, alpha));
-      }
+      dispatch(refreshMoreSingerList(type, area, alpha));
     },
     //顶部下拉刷新
-    pullDownRefreshDispatch (category, alpha) {
+    pullDownRefreshDispatch (type, area, alpha) {
       dispatch(changePullDownLoading(true));
       dispatch(changePageCount(0));
-      if (category === '' && alpha === '') {
+      if (type === '' && area === '' && alpha === '') {
         dispatch(getHotSingerList());
       } else {
-        dispatch(getSingerList(category, alpha));
+        dispatch(getSingerList(type, area, alpha));
       }
     }
 

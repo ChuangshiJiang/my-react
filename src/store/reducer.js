@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux-immutable';
-import { reducer as recommendReducer } from '../application/Recommend/store/index'
+import { reducer as recommendReducer } from '../application/Recommend/store/index';
+import { reducer as singersReducer } from '../application/Singers/store/index';
 
 
 export default combineReducers({
   //根据具体功能模块添加reducer
-  recommend: recommendReducer
+  recommend: recommendReducer,
+  singers: singersReducer
 });

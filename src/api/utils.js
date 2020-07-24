@@ -9,6 +9,16 @@ export const getCount = (count) => {
   }
 }
 
-export const debounce = ()=>{
-  
+export const debounce = (func, delay) => {
+  let timer;
+  return function () {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    let _this = this;
+    let args = arguments;
+    timer = setTimeout(() => {
+      func.apply(_this, args)
+    }, delay);
+  }
 }

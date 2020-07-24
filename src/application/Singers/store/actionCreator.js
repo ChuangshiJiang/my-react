@@ -75,8 +75,29 @@ export const refreshMoreHotSingerList = ()=>{
   }
 };
 
-export const getSingerList = (category,alpha)=>{
-  return ()=>{
-    
+export const getSingerList = (type,area,alpha)=>{
+  return (dispatch,getState)=>{
+    getSingerListRequest(type,area,alpha,0).then(res=>{
+      const data = res.artists;
+      dispatch(changeSingerList(data));
+      dispatch(changeEnterLoading(false));
+      dispatch(changePullDownLoading(false));
+    }).catch(()=>{
+      console.log('歌手数据获取失败');
+    });
   }
 };
+
+export const refreshMoreSingerList = (type,area,alpha) => {
+  return (dispatch,getState) => {
+    const pageCount = getState().getIn(['singers','pageCount']);
+    const singerList = getState().getIn(['singers','singerList']).toJS();
+    getSingerListRequest(type,area,alpha,pageCount).then(res=>{
+      const data = [...singerList,...res.artists];
+      dispatch(changeSingerList(data));
+      dispatch(changePullUpLoading(false));
+    }).catch(()=>{
+      console.log('歌手数据获取失败');
+    });
+  }
+}
