@@ -5,7 +5,7 @@ import Scroll from '../../baseUI/scroll';
 import Horizen from '../../baseUI/horizen-item';
 import { connect } from 'react-redux';
 import LazyLoad, { forceCheck } from 'react-lazyload';
-import { categoryTypes, alphaTypes, type as types, area as areas } from '../../api/config';
+import { alphaTypes, type as types, area as areas } from '../../api/config';
 
 import {
   getSingerList,
@@ -14,13 +14,10 @@ import {
   changePageCount,
   refreshMoreSingerList,
   changePullUpLoading,
-  changePullDownLoading,
-  refreshMoreHotSingerList
+  changePullDownLoading
 } from './store/actionCreator';
 
 function Singers (props) {
-
-  let [category, setCategory] = useState('');
   let [alpha, setAlpha] = useState('');
   let [area, setArea] = useState('-1');
   let [type, setType] = useState('-1');
