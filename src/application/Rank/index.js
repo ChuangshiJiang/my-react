@@ -1,11 +1,108 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
+import { getRankList } from './store/index';
+import { connect } from 'react-redux';
+import { filterIndex,filterIdx } from '../../api/utils';
+import { Container, List, ListItem, SongList } from './style';
+import { EnterLoading } from '../../application/Singers/style';
+import Scroll from '../../baseUI/scroll/index';
+import Loading from '../../baseUI/loading';
+
 
 function Rank (props) {
+  const { rankList: list, loading } = props;
+  const { getRankListDataDispatch } = props;
+
+  let rankList = list ? list.toJS() : [];
+
+  let globalStartIndex = filterIndex(rankList);
+  let officialList = rankList.slice(0, globalStartIndex);
+  let globalList = rankList.slice(globalStartIndex);
+
+  useEffect(() => {
+    getRankListDataDispatch();
+  }, []);
+
+  const enterDetail = (name) => {
+    const idx = filterIdx(name);
+    if(idx === null){
+      alert('暂无相关数据');
+      return;
+    }
+  }
+
+  const renderRankList = (list, global) => {
+    return (
+      <List globalRank={global}>
+        {
+          list.map(item => {
+            return (
+              <ListItem key={item.coverImgId} tracks={item.tracks} onClick={() => enterDetail(item.name)}>
+                <div className='img_wrapper'>
+                  <img src={item.coverImgUrl} alt="" />
+                  <div className='decorate'></div>
+                  <span className='update_frequency'>{item.updateFrequency}</span>
+                </div>
+                { renderSongList(item.tracks) }
+              </ListItem>
+            )
+          })
+        }
+      </List>
+    )
+  }
+
+  const renderSongList = list => {
+    if (list.length) {
+      return (
+        <SongList>
+          {
+            list.map((item, index) => {
+              return <li key={index}>{index + 1}.{item.first} - {item.second}</li>
+            })
+          }
+        </SongList>
+      );
+    }
+    return null;
+  }
+
+  let displayStyle = loading ? {"display":"none"} : {"display":""};
+
   return (
-    <div>
-      Rank
-    </div>
+    <Container>
+      <Scroll>
+        <div>
+          <h1 className='official' style={displayStyle}>官方榜</h1>
+          {
+            renderRankList(officialList)
+          }
+          <h1 className='global' style={displayStyle}>全球榜</h1>
+          {
+            renderRankList(globalList,true)
+          }
+          {
+            loading && 
+            <EnterLoading>
+              <Loading></Loading>
+            </EnterLoading>
+          }
+        </div>
+      </Scroll>
+    </Container>
   );
 }
 
-export default memo(Rank);
+//映射 Redux 全局的 state 到组件的 props 上
+const mapStateToProps = (state) => ({
+  rankList: state.getIn(['rank', 'rankList']),
+  loading: state.getIn(['rank', 'loading']),
+});
+
+//映射 dispatch 到组件的 props 上
+const mapDispatchToProps = (dispatch) => ({
+  getRankListDataDispatch () {
+    dispatch(getRankList());
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(memo(Rank));
