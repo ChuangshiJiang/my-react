@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import * as actionTypes from './store/actionCreator';
 
 import { forceCheck } from 'react-lazyload';
+import { renderRoutes } from 'react-router-config';
 
 function Recommend (props) {
   const { getBannerDataDispatch, getRecommendDataDispatch } = props;
@@ -39,6 +40,9 @@ function Recommend (props) {
           <RecommendList recommendList={recommendListJS}></RecommendList>
         </div>
       </Scroll>
+      {
+        renderRoutes(props.route.routes)
+      }
     </Content>
 
   );
