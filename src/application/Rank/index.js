@@ -6,7 +6,7 @@ import { Container, List, ListItem, SongList } from './style';
 import { EnterLoading } from '../../application/Singers/style';
 import Scroll from '../../baseUI/scroll/index';
 import Loading from '../../baseUI/loading';
-
+import { renderRoutes } from 'react-router-config';
 
 function Rank (props) {
   const { rankList: list, loading } = props;
@@ -22,21 +22,17 @@ function Rank (props) {
     getRankListDataDispatch();
   }, []);
 
-  const enterDetail = (name) => {
-    const idx = filterIdx(name);
-    if(idx === null){
-      alert('暂无相关数据');
-      return;
-    }
+  const enterDetail = (detail) => {
+    props.history.push(`/rank/${detail.id}`);
   }
 
   const renderRankList = (list, global) => {
     return (
       <List globalRank={global}>
         {
-          list.map(item => {
+          list.map((item,index) => {
             return (
-              <ListItem key={item.coverImgId} tracks={item.tracks} onClick={() => enterDetail(item.name)}>
+              <ListItem key={item.coverImgUrl} tracks={item.tracks} onClick={() => enterDetail(item)}>
                 <div className='img_wrapper'>
                   <img src={item.coverImgUrl} alt="" />
                   <div className='decorate'></div>
@@ -88,6 +84,9 @@ function Rank (props) {
           }
         </div>
       </Scroll>
+      {
+        renderRoutes(props.route.routes)
+      }
     </Container>
   );
 }
