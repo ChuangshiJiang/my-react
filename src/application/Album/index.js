@@ -1,15 +1,38 @@
-import React, { useState,useCallback,useRef } from 'react';
-import { Container, TopDesc, Menu,SongList,SongItem } from './style';
+import React, { useState, useCallback, useRef } from 'react';
+import { Container, TopDesc, Menu, SongList, SongItem } from './style';
 import { CSSTransition } from 'react-transition-group';
 import Header from '../../baseUI/header';
 import Scroll from '../../baseUI/scroll';
-import { getName,getCount } from '../../api/utils';
+import { getName, getCount } from '../../api/utils';
+import style from '../../assets/global-style';
+import header from '../../baseUI/header';
+
+export const HEADER_HEIGHT = 45;
 
 function Album (props) {
   const [showStatus, setShowStatus] = useState(true);
-  const [title,setTitle]  = useState('歌单');
-  const [isMarquee,setIsMarquee] = useState(false);//是否跑马灯
+  const [title, setTitle] = useState('歌单');
+  const [isMarquee, setIsMarquee] = useState(false);//是否跑马灯
   const headerEl = useRef();
+
+  const handleScroll = (pos) => {
+    let minScrollY = -HEADER_HEIGHT;
+    let percent = Math.abs(pos.y / minScrollY);
+    let headerDom = headerEl.current;
+
+    //滑过顶部的高度开始变化
+    if (pos.y < minScrollY) {
+      headerDom.style.backgroundColor = style['theme-color'];
+      headerDom.style.opacity = Math.min(1,(percent-1)/2);
+      setTitle(currentAlbum.name);
+      setIsMarquee(true);
+    } else {
+      headerDom.style.backgroundColor = '';
+      headerDom.style.opacity = 1;
+      setTitle('歌单');
+      setIsMarquee(false);
+    }
+  }
 
   //mock 数据
   const currentAlbum = {
@@ -107,8 +130,8 @@ function Album (props) {
       onExited={props.history.goBack}
     >
       <Container>
-        <Header title={'返回'} handleClick={handleBack} isMarquee={isMarquee}></Header>
-        <Scroll bounceTop={false}>
+        <Header title={title} handleClick={handleBack} isMarquee={isMarquee} ref={headerEl}></Header>
+        <Scroll bounceTop={false} onScroll={handleScroll}>
           <div>
             <TopDesc background={currentAlbum.coverImgUrl}>
               <div className="background">
