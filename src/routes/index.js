@@ -4,6 +4,7 @@ import Home from '../application/Home/';
 import Rank from '../application/Rank/';
 import Recommend from '../application/Recommend/';
 import Singers from '../application/Singers/';
+import Singer from '../application/Singer/'
 import Test from '../test.js';
 import Album from '../application/Album';
 
@@ -33,7 +34,13 @@ export default [
       },
       {
         path: '/singers',
-        component: Singers
+        component: Singers,
+        routes:[
+          {
+            path: '/singers/:id',
+            component: Singer
+          }
+        ]
       },
       {
         path: '/rank',
