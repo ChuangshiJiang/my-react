@@ -63,3 +63,5 @@ const SongsList = React.forwardRef((props, refs) => {
   );
 
 });
+
+export default React.memo(SongsList);
