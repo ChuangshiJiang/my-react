@@ -17,3 +17,12 @@ export const changeEnterLoading = (data) => ({
   data
 });
 
+export const getSingerInfo = (id) => {
+  return dispatch => {
+    getSingerInfoRequest(id).then(data=>{
+      dispatch(changeArtist(data.artist));
+      dispatch(changeSongs(data.hotSongs));
+      dispatch(changeEnterLoading(false));
+    });
+  }
+};

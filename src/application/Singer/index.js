@@ -1,11 +1,31 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 
 import { Container, ImgWrapper, BgLayer, CollectButton, SongListWrapper } from './style';
 import Header from '../../baseUI/header';
 import Scroll from '../../baseUI/scroll';
+import Loading from '../../baseUI/loading';
 import SongsList from '../SongsList';
 import { HEADER_HEIGHT } from './../../api/config';
+import { getSingerInfo,changeEnterLoading } from './store/actionCreators';
+
+const mapStateToProps = state => {
+  return {
+    artist: state.getIn(['singerInfo','artist']),
+    songs: state.getIn(['singerInfo','songsOfArtist']),
+    loading: state.getIn(['singerInfo','loading'])
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getSingerDataDispatch(id){
+      dispatch(changeEnterLoading(true));
+      dispatch(getSingerInfo(id));
+    }
+  };
+};
 
 function Singer (props) {
   const [showStatus, setShowStatus] = useState(true);
@@ -24,6 +44,8 @@ function Singer (props) {
   const OFFSET = 5;
 
   useEffect(() => {
+    const id = props.match.params.id;
+    getSingerDataDispatch(id);
     let h = imageWrapper.current.offsetHeight;
     songScrollWrapper.current.style.top = `${h - OFFSET}px`;
     initHeight.current = h;
@@ -69,27 +91,17 @@ function Singer (props) {
     }
   }, []);
 
-  const artist = {
-    picUrl: "https://p2.music.126.net/W__FCWFiyq0JdPtuLJoZVQ==/109951163765026271.jpg",
-    name: "薛之谦",
-    hotSongs: [
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑"
-        }
-      },
-      {
-        name: "我好像在哪见过你",
-        ar: [{ name: "薛之谦" }],
-        al: {
-          name: "薛之谦专辑"
-        }
-      },
-      // 省略 20 条
-    ]
-  };
+  const { 
+    artist: immutableArtist,
+    songs: immutableSongs,
+    loading
+  } = props;
+
+  const { getSingerDataDispatch } = props;
+
+  const artist = immutableArtist.toJS();
+  const songs = immutableSongs.toJS();
+
   return (
     <CSSTransition
       in={showStatus}
@@ -111,12 +123,17 @@ function Singer (props) {
         <BgLayer ref={layer}></BgLayer>
         <SongListWrapper ref={songScrollWrapper}>
           <Scroll ref={songScroll} onScroll={handleScroll}>
-            <SongsList songs={artist.hotSongs} showCollect={false}></SongsList>
+            <SongsList songs={songs} showCollect={false}></SongsList>
           </Scroll>
         </SongListWrapper>
+        {
+        loading
+        ?<Loading />
+        :null
+      }
       </Container>
     </CSSTransition>
   );
 }
 
-export default Singer;
+export default connect(mapStateToProps,mapDispatchToProps)(React.memo(Singer));
