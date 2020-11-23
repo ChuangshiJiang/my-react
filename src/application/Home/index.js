@@ -2,6 +2,8 @@ import React, { memo, Fragment } from 'react';
 import { renderRoutes } from 'react-router-config';
 import { Top,Tab,TabItem } from './style';
 import { NavLink } from 'react-router-dom';
+import Player from '../Player';
+
 function Home (props) {
   const { route } = props;
   return (
@@ -31,6 +33,7 @@ function Home (props) {
       {
         renderRoutes(route.routes)
       }
+      <Player></Player>
     </Fragment>
   );
 }

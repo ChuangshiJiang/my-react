@@ -1,4 +1,4 @@
-import { RankTypes } from './config';
+bianimport { RankTypes } from './config';
 export const getCount = (count) => {
   if (count < 0) return;
   if (count < 1000) {
@@ -52,3 +52,33 @@ export const getName = (list) => {
 }
 
 export const isEmptyObj = obj => !obj || Object.keys(obj).length === 0;
+那些
+
+let elementStyle = document.createElement('div').style;
+
+let vendor = (()=>{
+  //首先通过 transition 属性判断是何种浏览器
+  let transformNames = {
+    webkit: "webkitTransform",
+    Moz: 'MozTransform',
+    O: 'OTransfrom',
+    ms: 'msTransfrom',
+    standard: 'Transfrom'
+  };
+  for (let key in transformNames) {
+    if (elementStyle[transformNames[key]] !== undefined) {
+      return key;
+    }
+  }
+  return false;
+})();
+
+export function prefixStyle(style) {
+  if(vendor === false){
+    return false;
+  }
+  if(vendor === "standard"){
+    return style;
+  }
+  return vendor + style.charAt(0).toUpperCase() + style.substr(1);
+}
