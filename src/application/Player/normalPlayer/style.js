@@ -155,10 +155,10 @@ export const ProgressWrapper = styled.div`
     flex: 0 0 30px;
     line-height: 30px;
     width: 30px;
-    &.time-l {
+    &.time-l{
       text-align: left;
     }
-    &.time-r {
+    &.time-r{
       text-align: right;
     }
   }

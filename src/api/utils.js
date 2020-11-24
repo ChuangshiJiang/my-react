@@ -1,4 +1,4 @@
-bianimport { RankTypes } from './config';
+import { RankTypes } from './config';
 export const getCount = (count) => {
   if (count < 0) return;
   if (count < 1000) {
@@ -52,7 +52,6 @@ export const getName = (list) => {
 }
 
 export const isEmptyObj = obj => !obj || Object.keys(obj).length === 0;
-那些
 
 let elementStyle = document.createElement('div').style;
 
