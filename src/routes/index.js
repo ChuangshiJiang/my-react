@@ -4,8 +4,8 @@ import Home from '../application/Home/';
 import Rank from '../application/Rank/';
 import Recommend from '../application/Recommend/';
 import Singers from '../application/Singers/';
-import Singer from '../application/Singer/'
-import Test from '../test.js';
+import Singer from '../application/Singer/';
+import Test from '../components/demo/test.js';
 import Album from '../application/Album';
 
 export default [
